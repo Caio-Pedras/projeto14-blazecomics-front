@@ -33,7 +33,6 @@ export default function LoginPage() {
           "Houve um erro, preencha os dados corretamente e tente novamente"
         );
       });
-    setIsLoading(false);
   }
   return (
     <Container>
