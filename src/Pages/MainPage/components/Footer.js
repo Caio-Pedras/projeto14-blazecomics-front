@@ -12,8 +12,5 @@ const Footer = styled.footer`
   color: #ffffff;
   font-size: 30px;
   padding: 20px 0;
-  /* @media (max-width: 800px) {
-    justify-content: space-between;
-  } */
 `;
 export default Footer;
