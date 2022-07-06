@@ -108,4 +108,5 @@ const Text = styled.div`
 `;
 const Box = styled.div`
   opacity: ${(props) => props.opacity};
+  max-width: 600px;
 `;

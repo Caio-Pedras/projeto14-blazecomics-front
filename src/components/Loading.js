@@ -27,7 +27,7 @@ const Loader = styled.div`
   width: 100px;
   height: 100px;
   border: 10px solid #ffffff;
-  border-top-color: #3a245b;
+  border-top-color: #ce2a2a;
   border-radius: 50%;
   margin-bottom: 20px;
   @keyframes is-rotating {
