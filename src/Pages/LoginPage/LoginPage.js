@@ -77,7 +77,7 @@ const Container = styled.div`
 
   h1 {
     font-weight: 400;
-    font-size: 40px;
+    font-size: 50px;
     color: #ffffff;
     margin-bottom: 40px;
     font-family: "Bangers", cursive;
