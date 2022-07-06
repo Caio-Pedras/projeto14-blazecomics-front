@@ -27,22 +27,22 @@ export default function SignUpPage() {
       email,
       name,
       password,
+      confirmPassword,
     };
 
-    // axios
-    //   .post(`${URL}/signup`, body)
-    //   .then((res) => {
-    //     setIsLoading(false);
-    //     navigate("/login");
-    //   })
-    //   .catch((err) => {
-    //     setIsLoading(false);
-    //     console.log(err);
-    //     alert(
-    //       "Houve um erro, preencha os dados corretamente e tente novamente"
-    //     );
-    //   });
-    setIsLoading(false);
+    axios
+      .post(`${URL}/signup`, body)
+      .then((res) => {
+        setIsLoading(false);
+        navigate("/login");
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+        alert(
+          "Houve um erro, preencha os dados corretamente e tente novamente"
+        );
+      });
   }
 
   return (
