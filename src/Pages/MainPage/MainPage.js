@@ -134,9 +134,9 @@ const Box = styled.div`
   align-items: center;
   position: relative;
   width: 100%;
-
+  padding: 0 30px;
   img {
-    margin-top: 120px;
+    margin-top: 60px;
     border-radius: 50%;
     height: 500px;
     width: 500px;

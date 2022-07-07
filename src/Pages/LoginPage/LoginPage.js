@@ -81,6 +81,7 @@ const Container = styled.div`
     margin-bottom: 40px;
     font-family: "Bangers", cursive;
     text-align: center;
+    text-shadow: 1px 1px 2px red, 0 0 0.1em white, 0 0 0.2em white;
   }
 `;
 const Button = styled.div`
