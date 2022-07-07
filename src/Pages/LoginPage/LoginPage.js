@@ -19,21 +19,20 @@ export default function LoginPage() {
       password,
     };
 
-    // axios
-    //   .post(`${URL}/login`, body)
-    //   .then((res) => {
-    //     setToken(res.data);
-    //     setIsLoading(false);
-    //     navigate("/main");
-    //   })
-    //   .catch((err) => {
-    //     setIsLoading(false);
-    //     console.log(err);
-    //     alert(
-    //       "Houve um erro, preencha os dados corretamente e tente novamente"
-    //     );
-    //   });
-    setIsLoading(false);
+    axios
+      .post(`${URL}/login`, body)
+      .then((res) => {
+        setToken(res.data);
+        setIsLoading(false);
+        navigate("/");
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        console.log(err);
+        alert(
+          "Houve um erro, preencha os dados corretamente e tente novamente"
+        );
+      });
   }
   return (
     <Container>
