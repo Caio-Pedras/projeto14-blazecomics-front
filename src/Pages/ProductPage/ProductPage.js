@@ -21,6 +21,10 @@ export default function ProductPage() {
       .catch((err) => console.log(err));
   }
   function addToCart() {
+    if (product.number < 1) {
+      alert("O volume selecionado não esta disponivel");
+      return;
+    }
     const item = { productId, number: buyNumber };
     if (!JSON.parse(localStorage.getItem("cartItems"))) {
       localStorage.setItem("cartItems", JSON.stringify([item]));
@@ -72,19 +76,26 @@ export default function ProductPage() {
           <BuyInfo>
             <MobileSelector>
               <NumberSelector>
-                <ion-icon
-                  name="remove-circle"
-                  onClick={() => {
-                    if (buyNumber > 1) setBuyNumber(buyNumber - 1);
-                  }}
-                ></ion-icon>
-                <p>Quatindade: {buyNumber} </p>
-                <ion-icon
-                  name="add-circle"
-                  onClick={() => {
-                    if (buyNumber < product.number) setBuyNumber(buyNumber + 1);
-                  }}
-                ></ion-icon>
+                {product.number > 0 ? (
+                  <>
+                    <ion-icon
+                      name="remove-circle"
+                      onClick={() => {
+                        if (buyNumber > 1) setBuyNumber(buyNumber - 1);
+                      }}
+                    ></ion-icon>
+                    <p>Quatindade: {buyNumber} </p>
+                    <ion-icon
+                      name="add-circle"
+                      onClick={() => {
+                        if (buyNumber < product.number)
+                          setBuyNumber(buyNumber + 1);
+                      }}
+                    ></ion-icon>
+                  </>
+                ) : (
+                  <p>Sem estoque</p>
+                )}
               </NumberSelector>
               <p>R$ {finalPrice}</p>
             </MobileSelector>
@@ -94,19 +105,26 @@ export default function ProductPage() {
             <p>{product.description}</p>
             <DesktopSelector>
               <DesktopNumberSelector>
-                <ion-icon
-                  name="remove-circle"
-                  onClick={() => {
-                    if (buyNumber > 1) setBuyNumber(buyNumber - 1);
-                  }}
-                ></ion-icon>
-                <p>Quatindade: {buyNumber} </p>
-                <ion-icon
-                  name="add-circle"
-                  onClick={() => {
-                    if (buyNumber < product.number) setBuyNumber(buyNumber + 1);
-                  }}
-                ></ion-icon>
+                {product.number > 0 ? (
+                  <>
+                    <ion-icon
+                      name="remove-circle"
+                      onClick={() => {
+                        if (buyNumber > 1) setBuyNumber(buyNumber - 1);
+                      }}
+                    ></ion-icon>
+                    <p>Quatindade: {buyNumber} </p>
+                    <ion-icon
+                      name="add-circle"
+                      onClick={() => {
+                        if (buyNumber < product.number)
+                          setBuyNumber(buyNumber + 1);
+                      }}
+                    ></ion-icon>
+                  </>
+                ) : (
+                  <p>Sem estoque</p>
+                )}
               </DesktopNumberSelector>
               <p>R$ {finalPrice}</p>
             </DesktopSelector>
@@ -155,7 +173,7 @@ const DesktopNumberSelector = styled.div`
   display: flex;
   width: 300px;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   column-gap: 5px;
   padding: 5px;
   margin-top: 20px;

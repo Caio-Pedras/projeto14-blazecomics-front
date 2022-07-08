@@ -41,7 +41,11 @@ export default function MainPage() {
               <ComicBanner>
                 <h1>{product.name}</h1>
                 <p>R$ {product.price}</p>
-                <span>Qtd. {product.number}</span>
+                {product.number > 0 ? (
+                  <span>Qtd. {product.number}</span>
+                ) : (
+                  <span>Sem estoque</span>
+                )}
               </ComicBanner>
             </Comic>
           </Link>
