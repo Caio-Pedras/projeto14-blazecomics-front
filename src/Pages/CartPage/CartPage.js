@@ -1,51 +1,79 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../../userContext/userContext";
 
 export default function CartPage() {
   const [productsCart, setProductsCart] = useState([])
   const body = JSON.parse(localStorage.getItem('cartItems'))
-  
-  
+  const navigate = useNavigate();
+  const { setBodyCart, bodyCart, URL , token} = useContext(UserContext)
   useEffect(() => {
     axios
-      .post("http://localhost:5000/cart", { body })
+      .post(`${URL}/cart`, { body })
       .then((res) => {
         setProductsCart(res.data);
+        setBodyCart(res.data);
       })
       .catch((err) =>
         console.log(err)
       )
   }, [])
 
+
+  function finalizingOrder() {
+    if(!token) {
+      alert("você precisa estar logado para finalizar a compra");
+      navigate("/login")
+    }
+
+    const config = {
+      headers: {
+          "Authorization": `Bearer ${token}`
+      }
+    } 
+    axios
+      .post(`${URL}/buy`, bodyCart, config)
+      .then((res) => console.log('to dentro'))
+      .catch((err) => {console.log('logue'); navigate("/login")})
+
+  }
+
   return (
     <Container>
       <Title>Blaze Comics</Title>
-      {productsCart.map((item, index) => {
-        return (
-          <Product key={index}>
-            <Banner>
-              <img src={item.picture} alt="" />
-            </Banner>
-            <div>
-              <p> {item.name}</p>
-              <p> {item.number} </p>
-              <p>  {item.price} </p>
-            </div>
-            <IconTrash>
-              <ion-icon name="trash-outline"></ion-icon>
-            </IconTrash>
-          </Product>
-        )
-      })}
+      {
+        productsCart.length === 0 ? 
+        <Product>
+          <p> Você nao tem produtos no carrinho </p> 
+        </Product>
+   
+        : 
+        productsCart.map((item, index) => {
+          return (
+            <Product key={index}>
+              <Banner>
+                <img src={item.picture} alt="" />
+              </Banner>
+              <div>
+                <p> {item.name}</p>
+                <p> {item.number} </p>
+                <p>  {item.price} </p>
+              </div>
+              <IconTrash>
+                <ion-icon name="trash-outline"></ion-icon>
+              </IconTrash>
+            </Product>
+          )
+        })}
       <Footer>
         <Link to="/">
           <IconWrapper>
             <ion-icon name="home"></ion-icon>
           </IconWrapper>
         </Link>
-        <Button onClick={() => { }}>Finalizar</Button>
+        <Button onClick={finalizingOrder}>Finalizar</Button>
       </Footer>
     </Container>
   )
