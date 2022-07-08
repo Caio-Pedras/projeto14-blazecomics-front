@@ -2,7 +2,7 @@ import React from "react";
 import { UserContext } from "./userContext.js";
 import { useState } from "react";
 export default function UserContextProvider(props) {
-  const URL = "http://localhost:5000";
+  const URL = "https://blaze-comics.herokuapp.com";
   const [token, setToken] = useState();
   const [bodyCart, setBodyCart] = useState();
   return (
