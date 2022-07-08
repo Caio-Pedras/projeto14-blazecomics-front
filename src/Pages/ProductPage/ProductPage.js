@@ -26,7 +26,17 @@ export default function ProductPage() {
       localStorage.setItem("cartItems", JSON.stringify([item]));
     } else {
       let cartItems = JSON.parse(localStorage.getItem("cartItems"));
-      cartItems.push(item);
+      if (cartItems.some((item) => item.productId === productId)) {
+        console.log("existe repitido");
+        cartItems.map((item) => {
+          if (item.productId === productId) {
+            item.number = item.number + buyNumber;
+          }
+          return item;
+        });
+      } else {
+        cartItems.push(item);
+      }
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
     }
     navigate("/");
@@ -207,6 +217,7 @@ const Button = styled.div`
   font-weight: 400;
   padding: 10px 0;
   margin-left: 10px;
+  max-width: 700px;
   cursor: pointer;
 `;
 const Synopsis = styled.div`
