@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 export default function CartPage() {
   const [productsCart, setProductsCart] = useState([])
   const body = JSON.parse(localStorage.getItem('cartItems'))
+  
+  
   useEffect(() => {
     axios
       .post("http://localhost:5000/cart", { body })
@@ -28,7 +30,8 @@ export default function CartPage() {
             </Banner>
             <div>
               <p> {item.name}</p>
-              <p> {item.price} </p>
+              <p> {item.number} </p>
+              <p>  {item.price} </p>
             </div>
             <IconTrash>
               <ion-icon name="trash-outline"></ion-icon>
@@ -66,6 +69,7 @@ const Product = styled.div`
   border: 3px solid #07F802;
   border-radius: 5px;
   position: relative;
+  margin-bottom: 10px;
   div {
     p {
       font-weight: 700;
@@ -83,7 +87,7 @@ const Banner = styled.figure`
   img {
     object-fit: cover;
     height: 180px;
-    width: 100%;
+    width: 124px;
     padding: 15px;
   }
 
@@ -101,6 +105,7 @@ const Footer = styled.div`
   align-items: center;
   color: #ffffff;
   font-size: 25px;
+  margin-bottom: 20px;
   justify-content: space-between;
 `;
 
@@ -109,6 +114,7 @@ const Button = styled.div`
   background-color: #33CF2F;
   width: 100%;
   height: 50px;
+  min-width: 280px;
   border-radius: 30px;
   font-weight: 400;
   padding: 10px 0;
@@ -129,13 +135,9 @@ const IconWrapper = styled.div`
 const Title = styled.div`
   margin-bottom: 50px;
   font-weight: 400;
-  font-size: 80px;
+  font-size: 40px;
   color: #ffffff;
   font-family: "Bangers", cursive;
   text-align: center;
   text-shadow: 1px 1px 2px red, 0 0 0.1em white, 0 0 0.2em white;
-  @media (max-width: 1023px) {
-    max-width: 270px;
-    font-size: 60px;
-  }
 `;
