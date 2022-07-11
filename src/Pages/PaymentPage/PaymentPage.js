@@ -59,7 +59,7 @@ export default function SignUpPage() {
         setBodyCart([]);
         setIsLoading(false);
         alert("Compra concluída!");
-        setCountCartItems(0)
+        setCountCartItems(JSON.parse(localStorage.getItem("cartItems")).length);
         navigate("/");
       })
       .catch((err) => {
