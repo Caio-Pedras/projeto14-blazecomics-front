@@ -7,7 +7,7 @@ import InputMask from "react-input-mask";
 import PaymentForm from "./components/PaymentForm";
 import Loading from "../../components/Loading";
 export default function SignUpPage() {
-  const { URL, token, bodyCart, setBodyCart } = useContext(UserContext);
+  const { URL, token, bodyCart, setBodyCart, setCountCartItems } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [creditCard, setCreditCard] = useState({
     cvc: "",
@@ -59,6 +59,7 @@ export default function SignUpPage() {
         setBodyCart([]);
         setIsLoading(false);
         alert("Compra concluída!");
+        setCountCartItems(0)
         navigate("/");
       })
       .catch((err) => {

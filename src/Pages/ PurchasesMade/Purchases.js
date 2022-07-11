@@ -52,7 +52,7 @@ export default function Purchases() {
             <h1> Você precisa logar para ver seus registros de compras</h1>
           </Buy>
         ) : (
-          <div>
+          <section>
             {buyers.map((item, index) => {
               return item.items.map((product) => {
                 let value = (
@@ -71,7 +71,7 @@ export default function Purchases() {
                 );
               });
             })}
-          </div>
+          </section>
         )}
         <Footer>
           <Link to={"/"}>
@@ -113,10 +113,17 @@ const CartWrapper = styled.div`
   }
 `;
 const Container = styled.div`
-  height: 100vh;
   width: 100%;
   padding: 20px;
   margin-bottom: 120px;
+  overflow-x: hidden;
+
+  section {
+    width: 100%;
+    height: 70%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
 `;
 
 const Title = styled.div`
