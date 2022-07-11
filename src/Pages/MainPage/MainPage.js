@@ -26,6 +26,7 @@ export default function MainPage() {
     );
   }
 
+
   function logOut() {
     setToken('')
   }
@@ -63,7 +64,7 @@ export default function MainPage() {
           <Link to="/cart">
             <ion-icon name="cart"></ion-icon>
           </Link>
-          {countCartItems > 0 ? <p>{countCartItems}</p> : <></>}
+          {countCartItems ? <p>{countCartItems}</p> : <></>}
         </CartWrapper>
         {token ? (
           <ion-icon onClick = {logOut} name="exit"></ion-icon>

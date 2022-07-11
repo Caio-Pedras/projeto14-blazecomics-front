@@ -39,10 +39,10 @@ export default function ProductPage() {
         });
       } else {
         cartItems.push(item);
-        setCountCartItems(countCartItems + 1);
       }
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
     }
+    setCountCartItems(JSON.parse(localStorage.getItem("cartItems")).length);
 
     navigate("/");
   }
