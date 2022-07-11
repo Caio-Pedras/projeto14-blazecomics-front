@@ -18,7 +18,6 @@ export default function MainPage() {
       .catch((err) => console.log(err));
   }
   useEffect(() => getProducts(), []);
-  console.log(products);
   if (!products) {
     return (
       <Container>

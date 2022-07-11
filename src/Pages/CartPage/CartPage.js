@@ -5,8 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../userContext/userContext";
 
 export default function CartPage() {
-  const [productsCart, setProductsCart] = useState([])
-  const body = JSON.parse(localStorage.getItem('cartItems'))
+  const [productsCart, setProductsCart] = useState([]);
+  const body = JSON.parse(localStorage.getItem("cartItems"));
   const navigate = useNavigate();
   const { setBodyCart, bodyCart, URL, token } = useContext(UserContext)
   let totalValue = 0
@@ -18,16 +18,13 @@ export default function CartPage() {
         setProductsCart(res.data);
         setBodyCart(res.data);
       })
-      .catch((err) =>
-        console.log(err)
-      )
-  }, [])
-
+      .catch((err) => console.log(err));
+  }, []);
 
   function finalizingOrder() {
     if (!token) {
       alert("você precisa estar logado para finalizar a compra");
-      navigate("/login")
+      navigate("/login");
     }
     if (productsCart.length === 0) {
       alert("Você nao tem items no carrinho")
@@ -107,7 +104,7 @@ export default function CartPage() {
         <Button onClick={finalizingOrder}>Finalizar</Button>
       </Footer>
     </Container>
-  )
+  );
 }
 
 
@@ -209,7 +206,7 @@ const NoProduct = styled.div`
   height: 180px;
   background-color: white;
   display: flex;
-  border: 3px solid #07F802;
+  border: 3px solid #07f802;
   border-radius: 5px;
   position: relative;
   margin-bottom: 10px;
@@ -230,14 +227,13 @@ const Banner = styled.figure`
     width: 124px;
     padding: 15px;
   }
-
-`
+`;
 
 const IconTrash = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-`
+`;
 
 const Footer = styled.div`
   margin-top: 30px;
@@ -255,7 +251,7 @@ const Footer = styled.div`
 
 const Button = styled.div`
   text-align: center;
-  background-color: #33CF2F;
+  background-color: #33cf2f;
   width: 100%;
   height: 50px;
   border-radius: 30px;

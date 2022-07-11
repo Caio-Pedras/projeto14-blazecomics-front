@@ -6,6 +6,7 @@ import MainPage from "./Pages/MainPage";
 import ProductPage from "./Pages/ProductPage";
 import CartPage from "./Pages/CartPage";
 import Purchases from "./Pages/ PurchasesMade";
+import PaymentPage from "./Pages/PaymentPage";
 import "./assets/css/reset.css";
 import "./assets/css/style.css";
 import UserContextProvider from "./userContext/UserContextProvider.js";
@@ -21,6 +22,7 @@ export default function App() {
           <Route path="/purchases" element={<Purchases />} />
           <Route path="/product/:productId" element={<ProductPage />} />
           <Route path="/cart/" element={<CartPage />} />
+          <Route path="/payment" element={<PaymentPage />} />
         </Routes>
       </BrowserRouter>
     </UserContextProvider>
