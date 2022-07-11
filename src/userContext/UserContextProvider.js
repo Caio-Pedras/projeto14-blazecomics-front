@@ -10,7 +10,6 @@ export default function UserContextProvider(props) {
     if (JSON.parse(localStorage.getItem("cartItems"))) {
       return JSON.parse(localStorage.getItem("cartItems")).length;
     }
-    return 0;
   });
 
   return (
