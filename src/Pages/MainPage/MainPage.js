@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../userContext/userContext";
 import styled from "styled-components";
-import Footer from "../MainPage/components/Footer";
+import Footer from "../../components/Footer.js";
 import banner from "../../assets/img/banner.jpg";
 import Loading from "../../components/Loading.js";
 import { Link } from "react-router-dom";
