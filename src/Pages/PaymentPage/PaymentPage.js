@@ -26,10 +26,6 @@ export default function SignUpPage() {
 
   function finalizingOrder() {
     setIsLoading(true);
-    if (!token) {
-      alert("você precisa estar logado para finalizar a compra");
-      navigate("/login");
-    }
     if (bodyCart.length === 0) {
       alert("Você nao tem items no carrinho");
       return;
