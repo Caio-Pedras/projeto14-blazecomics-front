@@ -3,26 +3,38 @@ import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../userContext/userContext";
+import Loading from "../../components/Loading";
 
 export default function CartPage() {
   const [productsCart, setProductsCart] = useState([]);
   const body = JSON.parse(localStorage.getItem("cartItems"));
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const { setBodyCart, bodyCart, URL, token } = useContext(UserContext);
   let totalValue = 0;
 
   useEffect(() => {
+    setIsLoading(true)
     axios
       .post(`${URL}/cart`, body)
       .then((res) => {
+        setIsLoading(false)
         setProductsCart(res.data);
         setBodyCart(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err)
+        setIsLoading(false)
+      });
   }, []);
 
   function navigateToPayment() {
     if (productsCart.length === 0) return;
+    if (!token) {
+      alert("você precisa estar logado para finalizar a compra");
+      navigate("/login");
+      return
+    }
     navigate("/payment");
   }
 
@@ -42,89 +54,123 @@ export default function CartPage() {
     setBodyCart(showProducts);
     localStorage.setItem("cartItems", JSON.stringify(filter));
   }
+  if (isLoading) {
+    return (
+      <Container>
+        <Loading>
+        </Loading>
+      </Container>
+    )
+  }
+  else {
+    return (
+      <Container>
+        <Title>Blaze Comics</Title>
+        {productsCart.length === 0 ? (
+          <NoProduct>
+            <p> Você nao possui produtos no carrinho </p>
+          </NoProduct>
+        ) : (
+          <ContainerProducts>
+            <h6> Confira todos seus produtos: </h6>
+            {productsCart.map((item, index) => {
+              let value = (
+                Number(item.price.replace(",", ".")) * parseInt(item.number)
+              ).toFixed(2);
+              totalValue = totalValue + Number(value);
+              return (
+                <Product key={index}>
+                  <Link to={`/product/${item._id}`} key={index}>
+                    <Banner>
+                      <img src={item.picture} alt="" />
+                    </Banner>
+                  </Link>
+                  <div>
+                    <p> {item.name}</p>
+                    <Quantity
+                      item={item.number}
+                      id={item._id}
+                      removeProduct={removeProduct}
+                      productsCart={productsCart}
+                      setProductsCart={setProductsCart}
+                      setBodyCart={setBodyCart}
+                    />
+                    <p> Valor : {value.toString().replace(".", ",")} </p>
+                  </div>
 
-  return (
-    <Container>
-      <Title>Blaze Comics</Title>
-      {productsCart.length === 0 ? (
-        <NoProduct>
-          <p> Você nao possui produtos no carrinho </p>
-        </NoProduct>
-      ) : (
-        <ContainerProducts>
-          <h6> Confira todos seus produtos: </h6>
-          {productsCart.map((item, index) => {
-            let value = (
-              Number(item.price.replace(",", ".")) * parseInt(item.number)
-            ).toFixed(2);
-            totalValue = totalValue + Number(value);
-            return (
-              <Product key={index}>
-                <Link to={`/product/${item._id}`} key={index}>
-                  <Banner>
-                    <img src={item.picture} alt="" />
-                  </Banner>
-                </Link>
-                <div>
-                  <p> {item.name}</p>
-                  <Quantity
-                    item={item.number}
-                    id={item._id}
-                    removeProduct={removeProduct}
-                  />
-                  <p> Valor : {value.toString().replace(".", ",")} </p>
-                </div>
+                  <IconTrash onClick={() => removeProduct(item._id, item.number)}>
+                    <ion-icon name="trash-outline"></ion-icon>
+                  </IconTrash>
+                </Product>
+              );
+            })}
+          </ContainerProducts>
+        )}
+        <Total>
+          TOTAL = R$ {totalValue.toFixed(2).toString().replace(".", ",")}
+        </Total>
+        <Footer>
+          <Link to="/">
+            <IconWrapper>
+              <ion-icon name="home"></ion-icon>
+            </IconWrapper>
+          </Link>
 
-                <IconTrash onClick={() => removeProduct(item._id, item.number)}>
-                  <ion-icon name="trash-outline"></ion-icon>
-                </IconTrash>
-              </Product>
-            );
-          })}
-        </ContainerProducts>
-      )}
-      <Total>
-        TOTAL = R$ {totalValue.toFixed(2).toString().replace(".", ",")}
-      </Total>
-      <Footer>
-        <Link to="/">
-          <IconWrapper>
-            <ion-icon name="home"></ion-icon>
-          </IconWrapper>
-        </Link>
-
-        <Button onClick={() => navigateToPayment()}>Finalizar</Button>
-      </Footer>
-    </Container>
-  );
+          <Button onClick={() => navigateToPayment()}>Finalizar</Button>
+        </Footer>
+      </Container>
+    );
+  }
 }
 
-function Quantity({ item, id, removeProduct }) {
+function Quantity({ item, id, removeProduct, productsCart, setProductsCart, setBodyCart }) {
   return (
     <Quant>
       <ion-icon
-        onClick={() => updateValue(item, id, removeProduct)}
+        onClick={() => updateValue(item, id, removeProduct, 'minus', productsCart, setProductsCart, setBodyCart)}
         name="remove-circle"
       ></ion-icon>
       <p>Quatindade: {item} </p>
-      <ion-icon name="add-circle"></ion-icon>
+      <ion-icon onClick={() => updateValue(item, id, removeProduct, 'plus', productsCart, setProductsCart, setBodyCart)}
+        name="add-circle"></ion-icon>
     </Quant>
   );
 }
 
-function updateValue(item, id, removeProduct) {
+function updateValue(item, id, removeProduct, type, productsCart, setProductsCart, setBodyCart) {
+  let num;
+  if (type === 'minus') {
+    num = -1
+  } else {
+    num = 1
+  }
   const it = {
     productId: id,
-    number: item - 1,
+    number: item + (num),
   };
   if (it.number === 0) {
     removeProduct(id, item);
   }
-  // } else {
-  //   removeProduct(id, item)
-  //   // let cartItems = JSON.parse(localStorage.getItem("cartItems"))
-  //   // const filter = cartItems.filter((items) => item.productId !== items.productId)
-  //   // localStorage.setItem('cartItems', JSON.stringify(...filter, it))
+  else {
+    let cartItems = JSON.parse(localStorage.getItem("cartItems"))
+    cartItems.map((item) => {
+      if (item.productId === id) {
+        item.number = it.number;
+      }
+      return item;
+    })
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    const showProducts = productsCart.map(
+      (item) => {
+        if (item._id === id) {
+          item.number = it.number;
+        }
+        return item;
+      }
+    );
+    setProductsCart(showProducts)
+    setBodyCart(showProducts)
+  }
 }
 
 const Container = styled.div`

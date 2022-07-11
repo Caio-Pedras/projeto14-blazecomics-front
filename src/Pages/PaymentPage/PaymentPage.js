@@ -30,6 +30,7 @@ export default function SignUpPage() {
 
   function finalizingOrder() {
     setIsLoading(true);
+
     if (signUpData.street === "" || signUpData.number === "") {
       alert("Favor preencher todos os campos para concluir a compra");
       setIsLoading(false);
@@ -41,6 +42,7 @@ export default function SignUpPage() {
       navigate("/login");
       return;
     }
+
     if (bodyCart.length === 0) {
       alert("Você nao tem items no carrinho");
       return;
