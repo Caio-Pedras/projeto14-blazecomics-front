@@ -10,7 +10,7 @@ export default function CartPage() {
   const navigate = useNavigate();
   const { setBodyCart, bodyCart, URL, token } = useContext(UserContext);
   let totalValue = 0;
-  console.log(productsCart);
+
   useEffect(() => {
     axios
       .post(`${URL}/cart`, body)

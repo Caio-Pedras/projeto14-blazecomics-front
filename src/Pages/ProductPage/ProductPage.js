@@ -31,7 +31,6 @@ export default function ProductPage() {
     } else {
       let cartItems = JSON.parse(localStorage.getItem("cartItems"));
       if (cartItems.some((item) => item.productId === productId)) {
-        console.log("existe repitido");
         cartItems.map((item) => {
           if (item.productId === productId) {
             item.number = item.number + buyNumber;
