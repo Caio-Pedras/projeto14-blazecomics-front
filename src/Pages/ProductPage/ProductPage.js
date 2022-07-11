@@ -252,12 +252,12 @@ const Synopsis = styled.div`
     font-size: 16px;
     margin-top: 0px;
     display: -webkit-box;
-    -webkit-line-clamp: 6; /* number of lines to show */
+    -webkit-line-clamp: 4; /* number of lines to show */
     line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: scroll;
     p {
-      line-height: 20px;
+      line-height: 18px;
     }
   }
 `;
