@@ -7,7 +7,7 @@ import Loading from "../../components/Loading.js";
 import { Link } from "react-router-dom";
 import axios from "axios";
 export default function MainPage() {
-  const { URL, token } = useContext(UserContext);
+  const { URL, token, setToken } = useContext(UserContext);
   const [products, setProducts] = useState();
   function getProducts() {
     axios
@@ -25,6 +25,11 @@ export default function MainPage() {
       </Container>
     );
   }
+
+  function logOut() {
+    setToken('')
+  }
+
   return (
     <Container>
       <Box>
@@ -58,7 +63,7 @@ export default function MainPage() {
           <ion-icon name="cart"></ion-icon>
         </Link>
         {token ? (
-          <ion-icon name="exit"></ion-icon>
+          <ion-icon onClick = {logOut} name="exit"></ion-icon>
         ) : (
           <Link to="/login">
             <ion-icon name={"person"}></ion-icon>
