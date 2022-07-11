@@ -7,7 +7,7 @@ import Loading from "../../components/Loading.js";
 import { Link } from "react-router-dom";
 import axios from "axios";
 export default function MainPage() {
-  const { URL, token, setToken } = useContext(UserContext);
+  const { URL, token, setToken, countCartItems } = useContext(UserContext);
   const [products, setProducts] = useState();
   function getProducts() {
     axios
@@ -57,11 +57,14 @@ export default function MainPage() {
       </ComicContainer>
       <Footer>
         <Link to={"/purchases"}>
-           <ion-icon name="card"></ion-icon>
+          <ion-icon name="card"></ion-icon>
         </Link>
-        <Link to="/cart">
-          <ion-icon name="cart"></ion-icon>
-        </Link>
+        <CartWrapper>
+          <Link to="/cart">
+            <ion-icon name="cart"></ion-icon>
+          </Link>
+          {countCartItems > 0 ? <p>{countCartItems}</p> : <></>}
+        </CartWrapper>
         {token ? (
           <ion-icon onClick = {logOut} name="exit"></ion-icon>
         ) : (
@@ -73,6 +76,23 @@ export default function MainPage() {
     </Container>
   );
 }
+const CartWrapper = styled.div`
+  position: relative;
+  p {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -10px;
+    right: -12px;
+    background-color: black;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    color: #ffffff;
+  }
+`;
 const Container = styled.div`
   display: flex;
   flex-direction: column;

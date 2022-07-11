@@ -7,12 +7,12 @@ import Footer from "../../components/Footer.js";
 import { Link } from "react-router-dom";
 
 export default function Purchases() {
-  const { URL, token, setToken } = useContext(UserContext);
+  const { URL, token, setToken, setCountCartItems, countCartItems } = useContext(UserContext);
   const [buyers, setBuyers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -23,12 +23,12 @@ export default function Purchases() {
       .get(`${URL}/purchases`, config)
       .then((res) => {
         setBuyers(res.data);
-        console.log(res.data)
-        setIsLoading(false)
+        console.log(res.data);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
-        setIsLoading(false)
+        setIsLoading(false);
       });
   }, []);
 
@@ -40,12 +40,10 @@ export default function Purchases() {
   if (isLoading) {
     return (
       <Container>
-        <Loading>
-        </Loading>
+        <Loading></Loading>
       </Container>
-    )
-  }
-  else {
+    );
+  } else {
     return (
       <Container>
         <Title>Blaze Comics</Title>
@@ -56,29 +54,22 @@ export default function Purchases() {
         ) : (
           <div>
             {buyers.map((item, index) => {
-              return (
-                item.items.map((product) => {
-                  let value = (
-                    Number(product.price.replace(",", ".")) * parseInt(product.number)
-                  ).toFixed(2);
-                  return (
-                    <Buy>
-
-                      <Link to={`/product/${product._id}`}><h1 key={index}>{product.name}</h1></Link>
-                      <p>
-                        Data: {item.date}
-                      </p>
-                      <p>
-                        Quantidade: {product.number}
-                      </p>
-                      <p>
-                        Valor: {value.toString().replace(".", ",")}
-                      </p>
-
-                    </Buy>
-                  );
-                })
-              )
+              return item.items.map((product) => {
+                let value = (
+                  Number(product.price.replace(",", ".")) *
+                  parseInt(product.number)
+                ).toFixed(2);
+                return (
+                  <Buy>
+                    <Link to={`/product/${product._id}`}>
+                      <h1 key={index}>{product.name}</h1>
+                    </Link>
+                    <p>Data: {item.date}</p>
+                    <p>Quantidade: {product.number}</p>
+                    <p>Valor: {value.toString().replace(".", ",")}</p>
+                  </Buy>
+                );
+              });
             })}
           </div>
         )}
@@ -86,11 +77,14 @@ export default function Purchases() {
           <Link to={"/"}>
             <ion-icon name="home"></ion-icon>
           </Link>
-          <Link to="/cart">
-            <ion-icon name="cart"></ion-icon>
-          </Link>
+          <CartWrapper>
+            <Link to="/cart">
+              <ion-icon name="cart"></ion-icon>
+            </Link>
+            {countCartItems > 0 ? <p>{countCartItems}</p> : <></>}
+          </CartWrapper>
           {token ? (
-            <ion-icon onClick = {logOut} name="exit"></ion-icon>
+            <ion-icon onClick={logOut} name="exit"></ion-icon>
           ) : (
             <Link to="/login">
               <ion-icon name={"person"}></ion-icon>
@@ -98,10 +92,26 @@ export default function Purchases() {
           )}
         </Footer>
       </Container>
-    )
+    );
   }
-};
-
+}
+const CartWrapper = styled.div`
+  position: relative;
+  p {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -10px;
+    right: -12px;
+    background-color: black;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    color: #ffffff;
+  }
+`;
 const Container = styled.div`
   height: 100vh;
   width: 100%;
