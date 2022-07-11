@@ -5,7 +5,7 @@ import Loading from "../../components/Loading.js";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 export default function ProductPage() {
-  const { URL, token } = useContext(UserContext);
+  const { URL, countCartItems, setCountCartItems } = useContext(UserContext);
   const [product, setProduct] = useState();
   const [buyNumber, setBuyNumber] = useState(1);
   const { productId } = useParams();
@@ -39,9 +39,11 @@ export default function ProductPage() {
         });
       } else {
         cartItems.push(item);
+        setCountCartItems(countCartItems + 1);
       }
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
     }
+
     navigate("/");
   }
   useEffect(() => getProductById(), []);
@@ -282,7 +284,7 @@ const BuyInfo = styled.div`
 `;
 const Container = styled.div`
   width: 100%;
-  padding: 20px 0 ;
+  padding: 20px 0;
   display: flex;
   flex-direction: column;
   align-items: center;

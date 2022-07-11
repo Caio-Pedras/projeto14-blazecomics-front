@@ -10,21 +10,22 @@ export default function CartPage() {
   const body = JSON.parse(localStorage.getItem("cartItems"));
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const { setBodyCart, bodyCart, URL, token } = useContext(UserContext);
+  const { setBodyCart, URL, token, setCountCartItems, countCartItems } =
+    useContext(UserContext);
   let totalValue = 0;
 
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     axios
       .post(`${URL}/cart`, body)
       .then((res) => {
-        setIsLoading(false)
+        setIsLoading(false);
         setProductsCart(res.data);
         setBodyCart(res.data);
       })
       .catch((err) => {
-        console.log(err)
-        setIsLoading(false)
+        console.log(err);
+        setIsLoading(false);
       });
   }, []);
 
@@ -33,7 +34,7 @@ export default function CartPage() {
     if (!token) {
       alert("você precisa estar logado para finalizar a compra");
       navigate("/login");
-      return
+      return;
     }
     navigate("/payment");
   }
@@ -53,16 +54,15 @@ export default function CartPage() {
     setProductsCart(showProducts);
     setBodyCart(showProducts);
     localStorage.setItem("cartItems", JSON.stringify(filter));
+    setCountCartItems(countCartItems - 1);
   }
   if (isLoading) {
     return (
       <Container>
-        <Loading>
-        </Loading>
+        <Loading></Loading>
       </Container>
-    )
-  }
-  else {
+    );
+  } else {
     return (
       <Container>
         <Title>Blaze Comics</Title>
@@ -98,7 +98,9 @@ export default function CartPage() {
                     <p> Valor : {value.toString().replace(".", ",")} </p>
                   </div>
 
-                  <IconTrash onClick={() => removeProduct(item._id, item.number)}>
+                  <IconTrash
+                    onClick={() => removeProduct(item._id, item.number)}
+                  >
                     <ion-icon name="trash-outline"></ion-icon>
                   </IconTrash>
                 </Product>
@@ -123,53 +125,87 @@ export default function CartPage() {
   }
 }
 
-function Quantity({ item, id, removeProduct, productsCart, setProductsCart, setBodyCart }) {
+function Quantity({
+  item,
+  id,
+  removeProduct,
+  productsCart,
+  setProductsCart,
+  setBodyCart,
+}) {
   return (
     <Quant>
       <ion-icon
-        onClick={() => updateValue(item, id, removeProduct, 'minus', productsCart, setProductsCart, setBodyCart)}
+        onClick={() =>
+          updateValue(
+            item,
+            id,
+            removeProduct,
+            "minus",
+            productsCart,
+            setProductsCart,
+            setBodyCart
+          )
+        }
         name="remove-circle"
       ></ion-icon>
       <p>Quatindade: {item} </p>
-      <ion-icon onClick={() => updateValue(item, id, removeProduct, 'plus', productsCart, setProductsCart, setBodyCart)}
-        name="add-circle"></ion-icon>
+      <ion-icon
+        onClick={() =>
+          updateValue(
+            item,
+            id,
+            removeProduct,
+            "plus",
+            productsCart,
+            setProductsCart,
+            setBodyCart
+          )
+        }
+        name="add-circle"
+      ></ion-icon>
     </Quant>
   );
 }
 
-function updateValue(item, id, removeProduct, type, productsCart, setProductsCart, setBodyCart) {
+function updateValue(
+  item,
+  id,
+  removeProduct,
+  type,
+  productsCart,
+  setProductsCart,
+  setBodyCart
+) {
   let num;
-  if (type === 'minus') {
-    num = -1
+  if (type === "minus") {
+    num = -1;
   } else {
-    num = 1
+    num = 1;
   }
   const it = {
     productId: id,
-    number: item + (num),
+    number: item + num,
   };
   if (it.number === 0) {
     removeProduct(id, item);
-  }
-  else {
-    let cartItems = JSON.parse(localStorage.getItem("cartItems"))
+  } else {
+    let cartItems = JSON.parse(localStorage.getItem("cartItems"));
     cartItems.map((item) => {
       if (item.productId === id) {
         item.number = it.number;
       }
       return item;
-    })
+    });
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    const showProducts = productsCart.map(
-      (item) => {
-        if (item._id === id) {
-          item.number = it.number;
-        }
-        return item;
+    const showProducts = productsCart.map((item) => {
+      if (item._id === id) {
+        item.number = it.number;
       }
-    );
-    setProductsCart(showProducts)
-    setBodyCart(showProducts)
+      return item;
+    });
+    setProductsCart(showProducts);
+    setBodyCart(showProducts);
   }
 }
 
