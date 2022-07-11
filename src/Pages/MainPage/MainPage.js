@@ -52,7 +52,9 @@ export default function MainPage() {
         ))}
       </ComicContainer>
       <Footer>
-        <ion-icon name="card"></ion-icon>
+        <Link to={"/purchases"}>
+           <ion-icon name="card"></ion-icon>
+        </Link>
         <Link to="/cart">
           <ion-icon name="cart"></ion-icon>
         </Link>
