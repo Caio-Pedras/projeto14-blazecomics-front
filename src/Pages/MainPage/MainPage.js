@@ -7,7 +7,7 @@ import Loading from "../../components/Loading.js";
 import { Link } from "react-router-dom";
 import axios from "axios";
 export default function MainPage() {
-  const { URL, token, countCartItems } = useContext(UserContext);
+  const { URL, token, setToken, countCartItems } = useContext(UserContext);
   const [products, setProducts] = useState();
   function getProducts() {
     axios
@@ -24,6 +24,11 @@ export default function MainPage() {
         <Loading></Loading>
       </Container>
     );
+  }
+
+
+  function logOut() {
+    setToken('')
   }
 
   return (
@@ -62,7 +67,7 @@ export default function MainPage() {
           {countCartItems ? <p>{countCartItems}</p> : <></>}
         </CartWrapper>
         {token ? (
-          <ion-icon name="exit"></ion-icon>
+          <ion-icon onClick = {logOut} name="exit"></ion-icon>
         ) : (
           <Link to="/login">
             <ion-icon name={"person"}></ion-icon>

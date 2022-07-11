@@ -7,8 +7,7 @@ import Footer from "../../components/Footer.js";
 import { Link } from "react-router-dom";
 
 export default function Purchases() {
-  const { URL, token, setCountCartItems, countCartItems } =
-    useContext(UserContext);
+  const { URL, token, setToken, setCountCartItems, countCartItems } = useContext(UserContext);
   const [buyers, setBuyers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -32,6 +31,12 @@ export default function Purchases() {
         setIsLoading(false);
       });
   }, []);
+
+  function logOut() {
+    setToken('')
+  }
+
+
   if (isLoading) {
     return (
       <Container>
@@ -79,7 +84,7 @@ export default function Purchases() {
             {countCartItems ? <p>{countCartItems}</p> : <></>}
           </CartWrapper>
           {token ? (
-            <ion-icon name="exit"></ion-icon>
+            <ion-icon onClick={logOut} name="exit"></ion-icon>
           ) : (
             <Link to="/login">
               <ion-icon name={"person"}></ion-icon>
