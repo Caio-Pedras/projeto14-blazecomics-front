@@ -8,9 +8,9 @@ export default function CartPage() {
   const [productsCart, setProductsCart] = useState([]);
   const body = JSON.parse(localStorage.getItem("cartItems"));
   const navigate = useNavigate();
-  const { setBodyCart, bodyCart, URL, token } = useContext(UserContext)
-  let totalValue = 0
-  console.log(productsCart)
+  const { setBodyCart, bodyCart, URL, token } = useContext(UserContext);
+  let totalValue = 0;
+  console.log(productsCart);
   useEffect(() => {
     axios
       .post(`${URL}/cart`, body)
@@ -21,77 +21,68 @@ export default function CartPage() {
       .catch((err) => console.log(err));
   }, []);
 
-  function finalizingOrder() {
-    if (!token) {
-      alert("você precisa estar logado para finalizar a compra");
-      navigate("/login");
-    }
-    if (productsCart.length === 0) {
-      alert("Você nao tem items no carrinho")
-      return
-    }
-    const config = {
-      headers: {
-        "Authorization": `Bearer ${token}`
-      }
-    }
-    axios
-      .post(`${URL}/buy`, bodyCart, config)
-      .then((res) => { localStorage.clear(); setProductsCart([]); setBodyCart([]) })
-      .catch((err) => { navigate("/login") })
+  function navigateToPayment() {
+    if (productsCart.length === 0) return;
+    navigate("/payment");
   }
-
 
   function removeProduct(id, number) {
     const item = {
-      'productId': id,
-      number
-    }
-    let cartItems = JSON.parse(localStorage.getItem("cartItems"))
-    const filter = cartItems.filter((items) => item.productId !== items.productId)
-    const showProducts = productsCart.filter((items) => item.productId !== items._id)
-    setProductsCart(showProducts)
-    setBodyCart(showProducts)
-    localStorage.setItem('cartItems', JSON.stringify(filter))
+      productId: id,
+      number,
+    };
+    let cartItems = JSON.parse(localStorage.getItem("cartItems"));
+    const filter = cartItems.filter(
+      (items) => item.productId !== items.productId
+    );
+    const showProducts = productsCart.filter(
+      (items) => item.productId !== items._id
+    );
+    setProductsCart(showProducts);
+    setBodyCart(showProducts);
+    localStorage.setItem("cartItems", JSON.stringify(filter));
   }
-
-
 
   return (
     <Container>
       <Title>Blaze Comics</Title>
-      {
-        productsCart.length === 0 ?
-          <NoProduct>
-            <p> Você nao possui produtos no carrinho </p>
-          </NoProduct>
-          :
-          <ContainerProducts>
-            <h6> Confira todos seus produtos: </h6>
-            {productsCart.map((item, index) => {
-              let value = (Number(item.price.replace(",", ".")) * parseInt(item.number)).toFixed(2);
-              totalValue = totalValue + Number(value)
-              return (
-                <Product key={index}>
-                  <Link to={`/product/${item._id}`} key={index}>
-                    <Banner>
-                      <img src={item.picture} alt="" />
-                    </Banner>
-                  </Link>
-                  <div>
-                    <p> {item.name}</p>
-                    <Quantity item={item.number} id={item._id} removeProduct={removeProduct} />
-                    <p>  Valor : {value.toString().replace(".", ",")} </p>
-                  </div>
+      {productsCart.length === 0 ? (
+        <NoProduct>
+          <p> Você nao possui produtos no carrinho </p>
+        </NoProduct>
+      ) : (
+        <ContainerProducts>
+          <h6> Confira todos seus produtos: </h6>
+          {productsCart.map((item, index) => {
+            let value = (
+              Number(item.price.replace(",", ".")) * parseInt(item.number)
+            ).toFixed(2);
+            totalValue = totalValue + Number(value);
+            return (
+              <Product key={index}>
+                <Link to={`/product/${item._id}`} key={index}>
+                  <Banner>
+                    <img src={item.picture} alt="" />
+                  </Banner>
+                </Link>
+                <div>
+                  <p> {item.name}</p>
+                  <Quantity
+                    item={item.number}
+                    id={item._id}
+                    removeProduct={removeProduct}
+                  />
+                  <p> Valor : {value.toString().replace(".", ",")} </p>
+                </div>
 
-                  <IconTrash onClick={() => removeProduct(item._id, item.number)}>
-                    <ion-icon name="trash-outline"></ion-icon>
-                  </IconTrash>
-                </Product>
-              )
-            })}
-          </ContainerProducts>
-      }
+                <IconTrash onClick={() => removeProduct(item._id, item.number)}>
+                  <ion-icon name="trash-outline"></ion-icon>
+                </IconTrash>
+              </Product>
+            );
+          })}
+        </ContainerProducts>
+      )}
       <Total>
         TOTAL = R$ {totalValue.toFixed(2).toString().replace(".", ",")}
       </Total>
@@ -101,38 +92,40 @@ export default function CartPage() {
             <ion-icon name="home"></ion-icon>
           </IconWrapper>
         </Link>
-        <Button onClick={finalizingOrder}>Finalizar</Button>
+
+        <Button onClick={() => navigateToPayment()}>Finalizar</Button>
       </Footer>
     </Container>
   );
 }
 
-
-function Quantity({ item , id, removeProduct }) {
+function Quantity({ item, id, removeProduct }) {
   return (
     <Quant>
-      <ion-icon onClick={() => updateValue(item, id, removeProduct)}
-        name="remove-circle"></ion-icon>
+      <ion-icon
+        onClick={() => updateValue(item, id, removeProduct)}
+        name="remove-circle"
+      ></ion-icon>
       <p>Quatindade: {item} </p>
       <ion-icon name="add-circle"></ion-icon>
     </Quant>
-  )
+  );
 }
 
 function updateValue(item, id, removeProduct) {
   const it = {
-    'productId': id,
-    number: item - 1
-  }
-  if(it.number === 0){
-    removeProduct(id, item)
+    productId: id,
+    number: item - 1,
+  };
+  if (it.number === 0) {
+    removeProduct(id, item);
   }
   // } else {
   //   removeProduct(id, item)
   //   // let cartItems = JSON.parse(localStorage.getItem("cartItems"))
   //   // const filter = cartItems.filter((items) => item.productId !== items.productId)
   //   // localStorage.setItem('cartItems', JSON.stringify(...filter, it))
-  }
+}
 
 const Container = styled.div`
   width: 100%;
@@ -146,16 +139,16 @@ const Container = styled.div`
 const Total = styled.div`
   width: 100%;
   height: 42px;
-  background-color: #B5DE5D;
+  background-color: #b5de5d;
   font-weight: 700;
   font-size: 20px;
-  text-align:  center;
+  text-align: center;
   position: fixed;
   display: flex;
   justify-content: center;
   align-items: center;
   bottom: 100px;
-`
+`;
 
 const ContainerProducts = styled.div`
   width: 100%;
@@ -167,7 +160,7 @@ const ContainerProducts = styled.div`
     font-weight: 700;
     margin-bottom: 10px;
   }
-`
+`;
 
 const Product = styled.div`
   width: 100%;
@@ -175,7 +168,7 @@ const Product = styled.div`
   min-height: 180px;
   background-color: white;
   display: flex;
-  border: 3px solid #07F802;
+  border: 3px solid #07f802;
   border-radius: 5px;
   position: relative;
   margin-bottom: 10px;
@@ -191,14 +184,14 @@ const Product = styled.div`
       margin-right: 10px;
     }
     font-size: 20px;
-    padding:15px 15px 15px 0;
+    padding: 15px 15px 15px 0;
   }
   p {
-      font-weight: 700;
-      font-size: 16px;
-      line-height: 19px;
-      color: #000000;
-    }
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+  }
 `;
 
 const NoProduct = styled.div`
@@ -213,14 +206,14 @@ const NoProduct = styled.div`
   align-items: center;
   justify-content: center;
   p {
-      font-weight: 700;
-      font-size: 16px;
-      line-height: 19px;
-      color: #000000;
-    }
-`
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
+  }
+`;
 
-const Banner = styled.figure` 
+const Banner = styled.figure`
   img {
     object-fit: cover;
     height: 180px;
@@ -288,5 +281,5 @@ const Quant = styled.ul`
   padding: 5px;
   max-width: 230px;
   width: 135px;
-  margin: 10px 0 10px 0 ;
-`
+  margin: 10px 0 10px 0;
+`;

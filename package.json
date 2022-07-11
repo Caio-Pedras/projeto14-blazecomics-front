@@ -5,11 +5,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "react": "^17.0.2",
-<<<<<<< HEAD
-    "react-credit-cards": "^0.8.3",
-=======
     "react-credit-cards-2": "^0.9.0",
->>>>>>> df99f09b056228d3d957295438a43249e2b79212
     "react-dom": "^17.0.2",
     "react-input-mask": "^2.0.4",
     "react-router-dom": "^6.3.0",

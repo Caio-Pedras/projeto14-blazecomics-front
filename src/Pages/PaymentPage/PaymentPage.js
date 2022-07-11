@@ -7,7 +7,7 @@ import InputMask from "react-input-mask";
 import PaymentForm from "./components/PaymentFrom";
 import Loading from "../../components/Loading";
 export default function SignUpPage() {
-  const { URL } = useContext(UserContext);
+  const { URL, token, bodyCart, setBodyCart } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -23,11 +23,36 @@ export default function SignUpPage() {
     number: "",
   });
   const navigate = useNavigate();
-  function purchase() {
-    setIsLoading(true);
 
-    setIsLoading(false);
+  function finalizingOrder() {
+    setIsLoading(true);
+    if (!token) {
+      alert("você precisa estar logado para finalizar a compra");
+      navigate("/login");
+    }
+    if (bodyCart.length === 0) {
+      alert("Você nao tem items no carrinho");
+      return;
+    }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    axios
+      .post(`${URL}/buy`, bodyCart, config)
+      .then((res) => {
+        localStorage.clear();
+        setBodyCart([]);
+        setIsLoading(false);
+        alert("Compra concluída!");
+        navigate("/");
+      })
+      .catch((err) => {
+        navigate("/login");
+      });
   }
+
   function getAdress() {
     if (signUpData.cep.length === 9) {
       signUpData.cep.replace("-", "");
@@ -133,7 +158,7 @@ export default function SignUpPage() {
           />
         </InputWrapper>
 
-        <Button onClick={() => purchase()}>
+        <Button onClick={() => finalizingOrder()}>
           <p>Finalizar Compra</p>
         </Button>
       </Box>
