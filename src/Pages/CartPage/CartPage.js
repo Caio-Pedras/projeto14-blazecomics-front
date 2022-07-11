@@ -120,11 +120,15 @@ function updateValue(item, id, removeProduct) {
   if (it.number === 0) {
     removeProduct(id, item);
   }
-  // } else {
-  //   removeProduct(id, item)
-  //   // let cartItems = JSON.parse(localStorage.getItem("cartItems"))
-  //   // const filter = cartItems.filter((items) => item.productId !== items.productId)
-  //   // localStorage.setItem('cartItems', JSON.stringify(...filter, it))
+  else {
+    let cartItems = JSON.parse(localStorage.getItem("cartItems"))
+    cartItems.map((item) => {
+      if (item.productId === id) {
+        item.number = it.number;
+      }
+      return item;
+    });
+  }
 }
 
 const Container = styled.div`
