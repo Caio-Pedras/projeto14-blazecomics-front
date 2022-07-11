@@ -22,7 +22,7 @@ export default function Purchases() {
     axios
       .get(`${URL}/purchases`, config)
       .then((res) => {
-        setBuyers(res.data);
+        setBuyers((res.data).reverse());
         console.log(res.data);
         setIsLoading(false);
       })
@@ -122,7 +122,6 @@ const Container = styled.div`
     width: 100%;
     height: 70%;
     overflow-x: hidden;
-    overflow-y: scroll;
   }
 `;
 
