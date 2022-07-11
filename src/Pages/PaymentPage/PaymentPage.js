@@ -63,6 +63,7 @@ export default function SignUpPage() {
         navigate("/");
       })
       .catch((err) => {
+        console.log(err)
         setIsLoading(false);
         navigate("/login");
       });
