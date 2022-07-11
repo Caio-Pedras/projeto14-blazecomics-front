@@ -54,7 +54,7 @@ export default function CartPage() {
     setProductsCart(showProducts);
     setBodyCart(showProducts);
     localStorage.setItem("cartItems", JSON.stringify(filter));
-    setCountCartItems(countCartItems - 1);
+    setCountCartItems(JSON.parse(localStorage.getItem("cartItems")).length);
   }
   if (isLoading) {
     return (

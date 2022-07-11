@@ -25,6 +25,7 @@ export default function MainPage() {
       </Container>
     );
   }
+
   return (
     <Container>
       <Box>
@@ -58,7 +59,7 @@ export default function MainPage() {
           <Link to="/cart">
             <ion-icon name="cart"></ion-icon>
           </Link>
-          {countCartItems > 0 ? <p>{countCartItems}</p> : <></>}
+          {countCartItems ? <p>{countCartItems}</p> : <></>}
         </CartWrapper>
         {token ? (
           <ion-icon name="exit"></ion-icon>
