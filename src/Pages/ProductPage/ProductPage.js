@@ -281,8 +281,8 @@ const BuyInfo = styled.div`
   font-size: 18px;
 `;
 const Container = styled.div`
-  height: 100vh;
   width: 100%;
+  padding: 20px 0 ;
   display: flex;
   flex-direction: column;
   align-items: center;
