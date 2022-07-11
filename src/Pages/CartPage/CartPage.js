@@ -5,10 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../userContext/userContext";
 
 export default function CartPage() {
-  const [productsCart, setProductsCart] = useState([])
-  const body = JSON.parse(localStorage.getItem('cartItems'))
+  const [productsCart, setProductsCart] = useState([]);
+  const body = JSON.parse(localStorage.getItem("cartItems"));
   const navigate = useNavigate();
-  const { setBodyCart, bodyCart, URL , token} = useContext(UserContext)
+  const { setBodyCart, bodyCart, URL, token } = useContext(UserContext);
   useEffect(() => {
     axios
       .post(`${URL}/cart`, { body })
@@ -16,40 +16,37 @@ export default function CartPage() {
         setProductsCart(res.data);
         setBodyCart(res.data);
       })
-      .catch((err) =>
-        console.log(err)
-      )
-  }, [])
-
+      .catch((err) => console.log(err));
+  }, []);
 
   function finalizingOrder() {
-    if(!token) {
+    if (!token) {
       alert("você precisa estar logado para finalizar a compra");
-      navigate("/login")
+      navigate("/login");
     }
 
     const config = {
       headers: {
-          "Authorization": `Bearer ${token}`
-      }
-    } 
+        Authorization: `Bearer ${token}`,
+      },
+    };
     axios
       .post(`${URL}/buy`, bodyCart, config)
-      .then((res) => console.log('to dentro'))
-      .catch((err) => {console.log('logue'); navigate("/login")})
-
+      .then((res) => console.log("to dentro"))
+      .catch((err) => {
+        console.log("logue");
+        navigate("/login");
+      });
   }
 
   return (
     <Container>
       <Title>Blaze Comics</Title>
-      {
-        productsCart.length === 0 ? 
+      {productsCart.length === 0 ? (
         <Product>
-          <p> Você nao tem produtos no carrinho </p> 
+          <p> Você nao tem produtos no carrinho </p>
         </Product>
-   
-        : 
+      ) : (
         productsCart.map((item, index) => {
           return (
             <Product key={index}>
@@ -59,14 +56,15 @@ export default function CartPage() {
               <div>
                 <p> {item.name}</p>
                 <p> {item.number} </p>
-                <p>  {item.price} </p>
+                <p> {item.price} </p>
               </div>
               <IconTrash>
                 <ion-icon name="trash-outline"></ion-icon>
               </IconTrash>
             </Product>
-          )
-        })}
+          );
+        })
+      )}
       <Footer>
         <Link to="/">
           <IconWrapper>
@@ -76,9 +74,8 @@ export default function CartPage() {
         <Button onClick={finalizingOrder}>Finalizar</Button>
       </Footer>
     </Container>
-  )
+  );
 }
-
 
 const Container = styled.div`
   width: 100%;
@@ -94,7 +91,7 @@ const Product = styled.div`
   height: 180px;
   background-color: white;
   display: flex;
-  border: 3px solid #07F802;
+  border: 3px solid #07f802;
   border-radius: 5px;
   position: relative;
   margin-bottom: 10px;
@@ -110,22 +107,20 @@ const Product = styled.div`
   }
 `;
 
-const Banner = styled.figure` 
-
+const Banner = styled.figure`
   img {
     object-fit: cover;
     height: 180px;
     width: 124px;
     padding: 15px;
   }
-
-`
+`;
 
 const IconTrash = styled.div`
   position: absolute;
   top: 0;
   right: 0;
-`
+`;
 
 const Footer = styled.div`
   margin-top: 30px;
@@ -139,7 +134,7 @@ const Footer = styled.div`
 
 const Button = styled.div`
   text-align: center;
-  background-color: #33CF2F;
+  background-color: #33cf2f;
   width: 100%;
   height: 50px;
   min-width: 280px;
