@@ -4,15 +4,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../userContext/userContext";
 import axios from "axios";
 import InputMask from "react-input-mask";
-import PaymentForm from "./components/PaymentFrom";
+import PaymentForm from "./components/PaymentForm";
 import Loading from "../../components/Loading";
 export default function SignUpPage() {
   const { URL, token, bodyCart, setBodyCart } = useContext(UserContext);
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [creditCard, setCreditCard] = useState({
+    cvc: "",
+    expiry: "",
+    focus: "",
+    name: "",
+    number: "",
+  });
   const [signUpData, setSignUpData] = useState({
     cep: "",
     street: "",
@@ -22,13 +25,21 @@ export default function SignUpPage() {
     extra: "",
     number: "",
   });
+
   const navigate = useNavigate();
 
   function finalizingOrder() {
     setIsLoading(true);
+    if (signUpData.street === "" || signUpData.number === "") {
+      alert("Favor preencher todos os campos para concluir a compra");
+      setIsLoading(false);
+      return;
+    }
     if (!token) {
       alert("você precisa estar logado para finalizar a compra");
+      setIsLoading(false);
       navigate("/login");
+      return;
     }
     if (bodyCart.length === 0) {
       alert("Você nao tem items no carrinho");
@@ -49,6 +60,7 @@ export default function SignUpPage() {
         navigate("/");
       })
       .catch((err) => {
+        setIsLoading(false);
         navigate("/login");
       });
   }
@@ -89,7 +101,10 @@ export default function SignUpPage() {
     <Container>
       <h1>Blaze Comics</h1>
       <Box>
-        <PaymentForm state={signUpData} setState={setSignUpData}></PaymentForm>
+        <PaymentForm
+          creditCard={creditCard}
+          setCreditCard={setCreditCard}
+        ></PaymentForm>
         <InputWrapper>
           <InputMask
             mask="99999-999"
@@ -126,7 +141,7 @@ export default function SignUpPage() {
           />
           <input
             className="smallInput"
-            type="text"
+            type="number"
             placeholder="Nº"
             value={signUpData.number}
             onChange={(e) =>
